@@ -1,891 +1,517 @@
-<html>
-<head>
-<title>v1 song cohort clusters.ipynb</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-.s0 { color: #63a35c;}
-.s1 { color: #333333;}
-.s2 { color: #183691;}
-.s3 { color: #a71d5d;}
-.s4 { color: #0086b3;}
-</style>
-</head>
-<body bgcolor="#ffffff">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
-<tr><td><center>
-<font face="Arial, Helvetica" color="#000000">
-v1 song cohort clusters.ipynb</font>
-</center></td></tr></table>
-<pre><span class="s0">{</span>
- <span class="s2">&quot;cells&quot;</span><span class="s0">: [</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;initial_id&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {</span>
-    <span class="s2">&quot;collapsed&quot;</span><span class="s0">: </span><span class="s3">true</span>
-   <span class="s0">},</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;import pandas as pd\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import numpy as np\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df = pd.read_csv('/Users/laurenrisoleo/Documents/ai ml bootcamp/pythonProject/applied ml hw/rolling_stones_spotify.csv')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df.head()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# Q1: Examine the data\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- duplicates\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- missing values \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- irrelevant entries\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- outliers \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- erroneous entries (if present)&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;ee075f8992cef1ba&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;df.isnull().sum()&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;70a95a39fd88eb22&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;There are no missing values, so no need for imputation.&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;16065232667413b4&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;df.info()&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;c3f4a39e312a98c6&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;We have mixed data types (float, int, and object). We should preprocess these for easier math later.&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;85ddb1a249988b44&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;#convert name, album, id, uri to strings, release date to a date so we can work with our fields.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['name'] = df['name'].astype(pd.StringDtype()) \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['album']= df['album'].astype(pd.StringDtype())\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['id'] = df['id'].astype(pd.StringDtype())\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['uri']= df['uri'].astype(pd.StringDtype())\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['release_date'] = pd.to_datetime(df['release_date'], format='mixed') \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['year'], df['month'] = df['release_date'].dt.year, df['release_date'].dt.month #split to year/month so we can see change over time\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['popularity'] = df['popularity'].astype(float) #to help us compare once scaled. float makes it easier.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df.head(5)&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;b97f2436fbd313a1&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;#remove outliers\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;def remove_outliers(df, col_list, whisk=1.5): #created a function to process any outliers in the data\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    for column in col_list:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        q1, q3= np.percentile(df[column], [25, 75])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        iqr = q3-q1 #sets the main interval \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        lower_limit = q1 - whisk*iqr #whisk is more flexible than 1.5, reco to use this to maintain flexibility\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        upper_limit = q3+ whisk*iqr\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        n_r_before = df.shape[0]\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        df= df[(df[column]&gt;=lower_limit) &amp; (df[column]&lt;= upper_limit)] #replace original df with a new df\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        n_after = df.shape[0]\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        print(column, \&quot;Before:\&quot;, n_r_before, \&quot;After:\&quot;, n_after)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        return(df)&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;b0a1b5f3f1cbc38a&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Check distribution:&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;408d188e3afcea55&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;import matplotlib.pyplot as plt\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import seaborn as sns\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# to get the columns w/ specific data type - this makes it a little easier for processing numeric items\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers = df.select_dtypes(include = ['float64'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers.head()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;9ace9cb82ee60f02&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Visualization:&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;80d2d52d5a3c581f&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;df_numbers_hist = df_numbers.hist(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'], bins = 30)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.tight_layout()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers_box= df_numbers.boxplot(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'],vert=False, showfliers=True) \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;7d27b272ec9bc904&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;We see that tempo is a great factor more than the other fields. It would be beneficial to normalize the tempo, duration, liveness, and loudness fields to map to other values, as those are set between 0 and 1. This can also help us with cluster analysis later on.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Let's do this with a min-max scalar approach. This helps us fix our data to a range between 0 and 1. This is sensitive to outliers.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;**Q2: refine the data + Q3: explore data and conduct feature engineering where appropriate**&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;29c68f1eec18a2a9&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;from sklearn.preprocessing import MinMaxScaler\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaler = MinMaxScaler()  #apply to specific fields of loudness and tempo. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;tempo_df = pd.DataFrame(df_numbers['tempo'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;loudness_df = pd.DataFrame(df_numbers['loudness'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;duration_df = pd.DataFrame(df['duration_ms'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;liveness_df = pd.DataFrame(df['liveness'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;popularity_df = pd.DataFrame(df['popularity'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_tempo = scaler.fit_transform(tempo_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_loudness = scaler.fit_transform(loudness_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_duration = scaler.fit_transform(duration_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_liveness = scaler.fit_transform(liveness_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_popularity = scaler.fit_transform(popularity_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers['scaled_tempo'] = scaled_tempo\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers['scaled_loudness'] = scaled_loudness  #adding our transformed columns to the numeric dataframe.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers['scaled_duration'] = scaled_duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers['scaled_liveness'] = scaled_liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers['scaled_popularity'] = scaled_popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;#exploring our new numerical data with the scaled factors\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers_hist = df_numbers.hist(\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], bins=30)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.tight_layout()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers_box = df_numbers.boxplot(\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False,\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    showfliers=True)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()  #things are looking a little better now; we can see that each attribute is on the same scale and provide a better representation of the distribution&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;103ff8ad926bf292&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;There is some skew in the distribution of album/song features. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Left-skew\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Right-skew\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Symmetric(ish)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- scaled-tempo (relatively normal distn with some skewness)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- scaled-loudness \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Polynomial \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Outliers contribute a large proportion of instrumentalness, speechiness, and scaled tempo. \n&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;c612057438233445&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;df_numbers_box = df_numbers.boxplot(\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness', 'scaled_loudness', 'speechiness',\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;            'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False, showfliers=False)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.title('Distribution of Scaled Data')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()  #removing outliers from visuals\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_popular_album = df[['album', 'popularity',\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;                       'name']]  #we won't need to normalize popularity for this comparison, but it would be good to do so to map to other elements. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;popularity_df = pd.DataFrame(df_popular_album['popularity'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;scaled_popularity = scaler.fit_transform(popularity_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_popular_album['scaled_popularity'] = scaled_popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_popular_album['year'] = df['year']\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_popular_album.value_counts().sort_values(ascending=False)  #allows us to check that our new scale is entered properly. &quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;b7bb949e5aac6f3f&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;**Q3.a: find the two albums to recommend based on song popularity.**&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;4efaa728eda0c18d&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;x = df_popular_album.sort_values('scaled_popularity', ascending=False)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;print('The top two songs are: ', x.head(2))&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;ad3ea34f347b779d&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;c27ee2b90058f4ee&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;The top albums to recommend based on popularity include: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- Aftermath score: 80/100 (Paint it black)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- Let It Bleed score: 76/100 (Gimme Shelter)&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;aeeb2872b8e79ce8&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;import numpy as np\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import seaborn as sns\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import matplotlib.pyplot as plt\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers_adj = df_numbers.drop(columns = ['loudness', 'tempo'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_numbers_adj.head()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;51c86156b72e04ad&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;**Q3.b: EDA for patterns**&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;61b50cb66c0e7744&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;df_numbers_adj.head()&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;12d15f70cc435fa4&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;attribute_correlation= df_numbers_adj.corr().round(2)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;fig, ax = plt.subplots(figsize=(15, 5))\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;sns.heatmap(attribute_correlation, annot=True, cmap ='viridis')&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;c97f5893bfe6abb1&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;There is a lot to process in this chart. We can probably simplify it to see if there are significant relationships, but some strong associations exist regardless.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;We see moderate to strong positive correlations between:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- scaled loudness and energy r=0.7\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- valence and danceability r=0.55\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- speechiness and energy r=0.42\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- liveness and energy r=0.51\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- liveness and speechiness r=0.4\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Key factors we should test in further analysis include:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- \&quot;energy\&quot; (as it is highly correlated to speechiness, which is also reflected in liveness and loudness)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- danceability (accounts for the valence relationship)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;We see moderate negative correlation between:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- speechniness and valence r= -0.4\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- liveness and danceability r=-0.52\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;We can remove the following from the data, as they do not contribute greatly to popularity:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- tempo (not a strong relationship with any of the other factors)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Let's double-check our conclusions through more exploratory analysis. &quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;ce92f885e282452b&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;**Q3.c: Examine popularity and various factors**&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;f567eb6ec39337ba&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;#looking at the relationship between scaled popularity and other factors \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from scipy.stats import pearsonr\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;attribute_correlation_popularity= df_numbers_adj.corr()['scaled_popularity']\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;attribute_correlation&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;7c83d77a03eb23cb&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;from scipy.stats import pearsonr\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;attribute_correlation_danciness= df_numbers_adj.corr()['danceability']\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;attribute_correlation&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;9f91c753b1d1a8c8&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;Overall, we can see that there isn't one single key driving factor that contributes to an album's popularity. We can conclude that as \&quot;liveness\&quot; increases, it is likely that popularity decreases in a proportionate manner. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;The same goes for \&quot;speechiness\&quot;. Maybe we're missing something from other columns in the data. Let's check and see. &quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;211acd480c3fcdef&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;#evaluate popularity over time\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;values, bins, bars = plt.hist( df_popular_album['year'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.xlabel('Release year')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.ylabel('Popularity')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;#here we can see that there is a u-shaped distribution to album popularity if we look at it by year. &quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3ff6f0225127b258&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Looks like there is a parabolic relationship between the release year and popularity. Let's check what could impact the surge in popularity. &quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;e50bb17209f4bbd7&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;#create groups of albums based on title information; this helps us compare against different types.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['remastered'] = df['album'].str.contains(\&quot;Remastered\&quot;).astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['anniversary'] = df['album'].str.contains(\&quot;50th Anniversary\&quot;).astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['mono'] = df['album'].str.contains('Mono').astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['live'] = df['album'].str.contains('Live').astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['long_version'] = df['album'].str.contains('Long Version').astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df['stereo'] = df['album'].str.contains('Stereo').astype(int)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;context_df = df[['remastered', 'anniversary', 'mono', 'live', 'long_version', 'stereo']]\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;context_df.astype('int')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;context_df.value_counts()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;7ac02fd27e194250&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;The most common \&quot;specialty\&quot; type of album listened to is \&quot;live\&quot;, followed by anything \&quot;remastered\&quot;. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Given all the data, we can conclude that....\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    1. Context of an album can impact how popular it is \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - We saw that \&quot;specialty\&quot; albums tend to be more popular, especially live and remastered ones \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    2. Based on correlation analysis, we can remove the following from the data, as they do not contribute greatly to popularity:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - instrumentalness \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - tempo (not a strong relationship with any of the other factors)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    3. Key factors to examine include:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - \&quot;energy\&quot; (highly correlated to speechiness, which is also reflected in liveness and loudness)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;        - danceability (accounts for the valence relationship as well)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    4. Albums released between years 1980-2010 didn't perform too well in terms of popularity \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    5. The release of remastered albums contributed to increased popularity from 2010- on\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# Q4: Cluster Analysis\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;a. identify the right number of clusters\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- we can do this using the \&quot;elbow\&quot; method\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- the silhouette method is a little easier to interpret, so let's conduct both analyses to see if there are nuances between them&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;7988b2e196ce1bae&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Let's try two methods to find the optimal number of clusters: elbow and silhouette score. We will apply these within a k-means clustering algorithm. &quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;affb1e47a5b09e54&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;df_numbers_adj.head(2)  #pulling up column names&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3fb9c2a4ab21d03b&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;df_numbers_adj.columns&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3954799d638415d1&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# importing the libraries\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import pandas as pd\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import matplotlib.pyplot as plt\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from sklearn.cluster import KMeans\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;cluster_df = df_numbers_adj.drop(columns= 'scaled_popularity')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;X= cluster_df\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;y = df_numbers_adj['scaled_popularity']\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# determining the maximum number of clusters \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;limit = int((X.shape[0]//2)**0.5)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot; \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# selecting optimal value of 'k' to predict popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# using elbow method\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# wcss - within cluster sum of squared distances\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;wcss = {}\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot; \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;for k in range(2,limit+1):\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    model = KMeans(n_clusters=k)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    model.fit(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    wcss[k] = model.inertia_\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;     \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# plotting the wcss values\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;# to find out the elbow value\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.plot(wcss.keys(), wcss.values(), 'gs-')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.xlabel('Values of \&quot;k\&quot;')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.ylabel('WCSS')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.title('optimal clusters for popularity via elbow method')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;#silhouette score: peak is the number of clusters you should use! \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from sklearn.metrics import silhouette_score  #can only be done if you have 2 clusters or more\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;ss = []\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;for i in range(2, 11):\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    model = KMeans(n_clusters=i, init='k-means++', random_state=42)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    model.fit(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    ss.append(silhouette_score(X, model.labels_))\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.plot(range(2, 11), ss, marker='^')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.xlabel('Number of clusters')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.ylabel('Silhouette Score')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;ba7621abc0c97ac7&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Based on this, it looks like 5 clusters should be sufficient but we could probably get away with 3 (the bend really starts at 5 clusters).&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;4677df6c454b28fd&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;cluster_df.head()&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;a38f1c82de928077&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;import numpy as np\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;np.argmax(\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;model = KMeans(n_clusters=5, init='k-means++', random_state=42)  #specifying 5 clusters from silhouette score and elbow method deductions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;label = model.fit_predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;print(label)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;### Run PCA on the data and reduce the dimensions in pca_num_components dimensions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import pandas as pd\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import seaborn as sns\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import matplotlib.pyplot as plt\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from sklearn.decomposition import PCA\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from sklearn.cluster import KMeans\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;### Run PCA on the data and reduce the dimensions in pca_num_components dimensions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;pca_num_components = 2\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;reduced_data = PCA(n_components=pca_num_components).fit_transform(cluster_df)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;sns.scatterplot(x=\&quot;pca1\&quot;, y=\&quot;pca2\&quot;, hue=label, data=results, color='spring')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.title('5 clusters with 2 dimensions')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;27a367ce99924442&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Looks like 5 clusters doesn't provide a whole lot of specificity, so let's see if things look a little better with less clusters (let's try 3).\n&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3563c97c4d9160af&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# visualize clusters!\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import numpy as np\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;np.argmax( ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;model2 = KMeans(n_clusters=3, init='k-means++', random_state=42)  #specifying 3 clusters from silhouette score and elbow method deductions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;label2 = model2.fit_predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;print(label2)\n&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;b252ae4bfb5294cd&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;### Run PCA on the data and reduce the dimensions in pca_num_components dimensions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import pandas as pd\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import seaborn as sns\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;import matplotlib.pyplot as plt\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;from sklearn.decomposition import PCA\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;### Run PCA on the data and reduce the dimensions in pca_num_components dimensions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;pca_num_components = 2\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;reduced_data = PCA(n_components=pca_num_components).fit_transform(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;sns.scatterplot(x='pca1', y='pca2',hue=label2, data=results)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.title('3 clusters with 2 dimensions')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;plt.show()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;9edc9fc9201f89cc&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: </span><span class="s2">&quot;Less clusters makes things a little easier to see the divide, but the distribution isn't much more clear than 5 clusters. Let's check some explicit factors and see what the spread is like for model 1 (5 clusters) and model 2 (3 clusters).\n&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;865b8f4a28b5595d&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;print('Model 1 Popularity')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new = df_numbers_adj.copy()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new['Cluster_Number'] = model.predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new.groupby(\&quot;Cluster_Number\&quot;)['popularity'].mean()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3d5ae00b66c1838a&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;print('Model 2 (3-cluster) Popularity')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new = df_numbers_adj.copy()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new['Cluster_Number'] = model2.predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new.groupby(\&quot;Cluster_Number\&quot;)['popularity'].mean()&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;f4c4a1e9985dc853&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;Popularity \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- Based on this data, we may get cleaner results leaning into 3 clusters of songs based on popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- There is some distinction between the 5 clusters, but popularity was just split out in increments of 20. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - This is the equivalent to quartile mapping, so 5 clusters may not be the best approach. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Let's check the spread of all factors in the clusters for both the 3 and 5-cluster models. &quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3d1c68f46453abda&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;print('5-cluster model summaries')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new = df_numbers_adj.copy()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new['Cluster_Number'] = model.predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;cluster_five = (df_new.groupby(\&quot;Cluster_Number\&quot;).mean()).T #THANK YOU AMIT FOR THIS \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;cluster_five&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;6ac27bf81bfa441d&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# 5-cluster model conclusions:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 0:__ \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Defined by songs with energy and \&quot;liveness\&quot;. These songs are not associated with instrumental or talking during the song and may not be the most popular in the repository.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low/ negligible: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - duration \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - accousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - tempo\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 1:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Defined by songs with high energy and loudness, but not necessarily live. This group of songs generally would not include any acoustic or instrumental versions.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - tempo\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 2:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Defined by songs with high energy; these songs tend to be loud, live, heavy instrumentals.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - tempo\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 3:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Songs in this cluster have high energy but are not considered live. These songs feature instrumentals heavily.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - tempo\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - valence\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 4:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Songs in this cluster are generally loud, but not considered live. They lack instrumentals and speech-y songs. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - speechiness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;2c1960d9f1e06529&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;code&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;print('3-cluster model summaries')\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new = df_numbers_adj.copy()\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;df_new['Cluster_Number'] = model2.predict(X)\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;three_cluster = df_new.groupby(\&quot;Cluster_Number\&quot;).mean().T\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;three_cluster.drop('popularity')&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;a4a3a0e71faa2267&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;outputs&quot;</span><span class="s0">: [],</span>
-   <span class="s2">&quot;execution_count&quot;</span><span class="s0">: </span><span class="s3">null</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# 3-cluster model conclusions\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 0:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;This cluster of songs represents a high energy cohort but the songs may not be as popular. This cluster does not emphasize acoustic or instrumental versions.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 1:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;This cluster of songs possesses a lot of energy but are shorter in length and are not live. These songs are moderately popular.\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;__Cluster 2:__\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Songs in this cohort are most impacted by the \&quot;energy\&quot; in a song or album. High energy is associated with loudness and liveness, so this makes sense. These songs tend to be shorter in duration and are not acoustic versions. \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- low: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - duration\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - popularity\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - acousticness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- moderate:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - danceability\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;- high: \n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - energy\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - instrumentalness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - liveness\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;    - loudness&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;78a0575c18783896&quot;</span>
-  <span class="s0">},</span>
-  <span class="s0">{</span>
-   <span class="s2">&quot;metadata&quot;</span><span class="s0">: {},</span>
-   <span class="s2">&quot;cell_type&quot;</span><span class="s0">: </span><span class="s2">&quot;markdown&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;source&quot;</span><span class="s0">: [</span>
-    <span class="s2">&quot;# Overall Comments:\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;\n&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;Comparing a 3-cluster model with a 5-cluster model, we can see that there are nuances between the cohorts, however these are not very distinct.  My recommendation is to use a 3-cluster model for song recommendations, as there is a more clear dilineation between cohorts. From my perspective, the 5-cluster model splits hairs a little too finely, so trying to find the ROI on a more complicated model is fine, but if a less-complicated model works just as well, then the simpler model is my preferred choice.\n&quot;</span>
-   <span class="s0">],</span>
-   <span class="s2">&quot;id&quot;</span><span class="s0">: </span><span class="s2">&quot;3f53738c26ef4354&quot;</span>
-  <span class="s0">}</span>
- <span class="s0">],</span>
- <span class="s2">&quot;metadata&quot;</span><span class="s0">: {</span>
-  <span class="s2">&quot;kernelspec&quot;</span><span class="s0">: {</span>
-   <span class="s2">&quot;display_name&quot;</span><span class="s0">: </span><span class="s2">&quot;Python 3&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;language&quot;</span><span class="s0">: </span><span class="s2">&quot;python&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;name&quot;</span><span class="s0">: </span><span class="s2">&quot;python3&quot;</span>
-  <span class="s0">},</span>
-  <span class="s2">&quot;language_info&quot;</span><span class="s0">: {</span>
-   <span class="s2">&quot;codemirror_mode&quot;</span><span class="s0">: {</span>
-    <span class="s2">&quot;name&quot;</span><span class="s0">: </span><span class="s2">&quot;ipython&quot;</span><span class="s0">,</span>
-    <span class="s2">&quot;version&quot;</span><span class="s0">: </span><span class="s4">2</span>
-   <span class="s0">},</span>
-   <span class="s2">&quot;file_extension&quot;</span><span class="s0">: </span><span class="s2">&quot;.py&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;mimetype&quot;</span><span class="s0">: </span><span class="s2">&quot;text/x-python&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;name&quot;</span><span class="s0">: </span><span class="s2">&quot;python&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;nbconvert_exporter&quot;</span><span class="s0">: </span><span class="s2">&quot;python&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;pygments_lexer&quot;</span><span class="s0">: </span><span class="s2">&quot;ipython2&quot;</span><span class="s0">,</span>
-   <span class="s2">&quot;version&quot;</span><span class="s0">: </span><span class="s2">&quot;2.7.6&quot;</span>
-  <span class="s0">}</span>
- <span class="s0">},</span>
- <span class="s2">&quot;nbformat&quot;</span><span class="s0">: </span><span class="s4">4</span><span class="s0">,</span>
- <span class="s2">&quot;nbformat_minor&quot;</span><span class="s0">: </span><span class="s4">5</span>
-<span class="s0">}</span>
-</pre>
-</body>
-</html>
+
+v1 song cohort clusters.py
+#%%
+import pandas as pd
+import numpy as np
+df = pd.read_csv('/Users/laurenrisoleo/Documents/ai ml bootcamp/pythonProject/applied ml hw/rolling_stones_spotify.csv')
+df.head()
+#%% md
+# # Q1: Examine the data
+# - duplicates
+# - missing values 
+# - irrelevant entries
+# - outliers 
+# - erroneous entries (if present)
+#%%
+df.isnull().sum()
+#%% md
+# There are no missing values, so no need for imputation.
+#%%
+df.info()
+#%% md
+# We have mixed data types (float, int, and object). We should preprocess these for easier math later.
+#%%
+#convert name, album, id, uri to strings, release date to a date so we can work with our fields.
+df['name'] = df['name'].astype(pd.StringDtype()) 
+df['album']= df['album'].astype(pd.StringDtype())
+df['id'] = df['id'].astype(pd.StringDtype())
+df['uri']= df['uri'].astype(pd.StringDtype())
+df['release_date'] = pd.to_datetime(df['release_date'], format='mixed') 
+df['year'], df['month'] = df['release_date'].dt.year, df['release_date'].dt.month #split to year/month so we can see change over time
+df['popularity'] = df['popularity'].astype(float) #to help us compare once scaled. float makes it easier.
+df.head(5)
+#%%
+#remove outliers
+
+def remove_outliers(df, col_list, whisk=1.5): #created a function to process any outliers in the data
+    for column in col_list:
+        q1, q3= np.percentile(df[column], [25, 75])
+        iqr = q3-q1 #sets the main interval 
+        lower_limit = q1 - whisk*iqr #whisk is more flexible than 1.5, reco to use this to maintain flexibility
+        upper_limit = q3+ whisk*iqr
+        n_r_before = df.shape[0]
+        df= df[(df[column]>=lower_limit) & (df[column]<= upper_limit)] #replace original df with a new df
+        n_after = df.shape[0]
+        print(column, "Before:", n_r_before, "After:", n_after)
+        return(df)
+#%% md
+# Check distribution:
+#%%
+import matplotlib.pyplot as plt
+import seaborn as sns
+# to get the columns w/ specific data type - this makes it a little easier for processing numeric items
+df_numbers = df.select_dtypes(include = ['float64'])
+df_numbers.head()
+#%% md
+# Visualization:
+#%%
+df_numbers_hist = df_numbers.hist(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'], bins = 30)
+plt.tight_layout()
+plt.show()
+df_numbers_box= df_numbers.boxplot(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'],vert=False, showfliers=True) 
+plt.show()
+#%% md
+# We see that tempo is a great factor more than the other fields. It would be beneficial to normalize the tempo, duration, liveness, and loudness fields to map to other values, as those are set between 0 and 1. This can also help us with cluster analysis later on.
+# 
+# Let's do this with a min-max scalar approach. This helps us fix our data to a range between 0 and 1. This is sensitive to outliers.
+# 
+# 
+# 
+# 
+# 
+# **Q2: refine the data + Q3: explore data and conduct feature engineering where appropriate**
+#%%
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()  #apply to specific fields of loudness and tempo. 
+tempo_df = pd.DataFrame(df_numbers['tempo'])
+loudness_df = pd.DataFrame(df_numbers['loudness'])
+duration_df = pd.DataFrame(df['duration_ms'])
+liveness_df = pd.DataFrame(df['liveness'])
+popularity_df = pd.DataFrame(df['popularity'])
+scaled_tempo = scaler.fit_transform(tempo_df)
+scaled_loudness = scaler.fit_transform(loudness_df)
+scaled_duration = scaler.fit_transform(duration_df)
+scaled_liveness = scaler.fit_transform(liveness_df)
+scaled_popularity = scaler.fit_transform(popularity_df)
+df_numbers['scaled_tempo'] = scaled_tempo
+df_numbers['scaled_loudness'] = scaled_loudness  #adding our transformed columns to the numeric dataframe.
+df_numbers['scaled_duration'] = scaled_duration
+df_numbers['scaled_liveness'] = scaled_liveness
+df_numbers['scaled_popularity'] = scaled_popularity
+#exploring our new numerical data with the scaled factors
+
+df_numbers_hist = df_numbers.hist(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',
+            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], bins=30)
+plt.tight_layout()
+plt.show()
+df_numbers_box = df_numbers.boxplot(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',
+            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False,
+    showfliers=True)
+plt.show()  #things are looking a little better now; we can see that each attribute is on the same scale and provide a better representation of the distribution
+#%% md
+# There is some skew in the distribution of album/song features. 
+# 
+# Left-skew
+# - energy
+# 
+# Right-skew
+# - speechiness
+# - instrumentalness
+# 
+# Symmetric(ish)
+# - scaled-tempo (relatively normal distn with some skewness)
+# - scaled-loudness 
+# - danceability
+# 
+# Polynomial 
+# - valence
+# - liveness
+# 
+# Outliers contribute a large proportion of instrumentalness, speechiness, and scaled tempo. 
+# 
+#%%
+df_numbers_box = df_numbers.boxplot(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness', 'scaled_loudness', 'speechiness',
+            'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False, showfliers=False)
+plt.title('Distribution of Scaled Data')
+plt.show()  #removing outliers from visuals
+df_popular_album = df[['album', 'popularity',
+                       'name']]  #we won't need to normalize popularity for this comparison, but it would be good to do so to map to other elements. 
+popularity_df = pd.DataFrame(df_popular_album['popularity'])
+scaled_popularity = scaler.fit_transform(popularity_df)
+df_popular_album['scaled_popularity'] = scaled_popularity
+df_popular_album['year'] = df['year']
+df_popular_album.value_counts().sort_values(ascending=False)  #allows us to check that our new scale is entered properly. 
+#%% md
+# **Q3.a: find the two albums to recommend based on song popularity.**
+#%%
+x = df_popular_album.sort_values('scaled_popularity', ascending=False)
+print('The top two songs are: ', x.head(2))
+#%% md
+# 
+#%% md
+# The top albums to recommend based on popularity include: 
+# - Aftermath score: 80/100 (Paint it black)
+# - Let It Bleed score: 76/100 (Gimme Shelter)
+#%%
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+df_numbers_adj = df_numbers.drop(columns = ['loudness', 'tempo'])
+df_numbers_adj.head()
+#%% md
+# **Q3.b: EDA for patterns**
+#%%
+df_numbers_adj.head()
+#%%
+attribute_correlation= df_numbers_adj.corr().round(2)
+fig, ax = plt.subplots(figsize=(15, 5))
+sns.heatmap(attribute_correlation, annot=True, cmap ='viridis')
+#%% md
+# There is a lot to process in this chart. We can probably simplify it to see if there are significant relationships, but some strong associations exist regardless.
+# 
+# We see moderate to strong positive correlations between:
+# - scaled loudness and energy r=0.7
+# - valence and danceability r=0.55
+# - speechiness and energy r=0.42
+# - liveness and energy r=0.51
+# - liveness and speechiness r=0.4
+# 
+# 
+# Key factors we should test in further analysis include:
+# - "energy" (as it is highly correlated to speechiness, which is also reflected in liveness and loudness)
+# - danceability (accounts for the valence relationship)
+# 
+# We see moderate negative correlation between:
+# - speechniness and valence r= -0.4
+# - liveness and danceability r=-0.52
+# 
+# 
+# We can remove the following from the data, as they do not contribute greatly to popularity:
+# - instrumentalness
+# - tempo (not a strong relationship with any of the other factors)
+# - acousticness
+# - duration
+# 
+# Let's double-check our conclusions through more exploratory analysis. 
+#%% md
+# **Q3.c: Examine popularity and various factors**
+#%%
+#looking at the relationship between scaled popularity and other factors 
+
+from scipy.stats import pearsonr
+attribute_correlation_popularity= df_numbers_adj.corr()['scaled_popularity']
+attribute_correlation
+#%%
+from scipy.stats import pearsonr
+attribute_correlation_danciness= df_numbers_adj.corr()['danceability']
+attribute_correlation
+#%% md
+# Overall, we can see that there isn't one single key driving factor that contributes to an album's popularity. We can conclude that as "liveness" increases, it is likely that popularity decreases in a proportionate manner. 
+# The same goes for "speechiness". Maybe we're missing something from other columns in the data. Let's check and see. 
+#%%
+#evaluate popularity over time
+values, bins, bars = plt.hist( df_popular_album['year'])
+plt.xlabel('Release year')
+plt.ylabel('Popularity')
+plt.show()
+#here we can see that there is a u-shaped distribution to album popularity if we look at it by year. 
+#%% md
+# Looks like there is a parabolic relationship between the release year and popularity. Let's check what could impact the surge in popularity. 
+#%%
+#create groups of albums based on title information; this helps us compare against different types.
+
+df['remastered'] = df['album'].str.contains("Remastered").astype(int)
+df['anniversary'] = df['album'].str.contains("50th Anniversary").astype(int)
+df['mono'] = df['album'].str.contains('Mono').astype(int)
+df['live'] = df['album'].str.contains('Live').astype(int)
+df['long_version'] = df['album'].str.contains('Long Version').astype(int)
+df['stereo'] = df['album'].str.contains('Stereo').astype(int)
+context_df = df[['remastered', 'anniversary', 'mono', 'live', 'long_version', 'stereo']]
+context_df.astype('int')
+context_df.value_counts()
+#%% md
+# The most common "specialty" type of album listened to is "live", followed by anything "remastered". 
+# 
+# 
+# 
+# 
+# Given all the data, we can conclude that....
+# 
+#     1. Context of an album can impact how popular it is 
+#         - We saw that "specialty" albums tend to be more popular, especially live and remastered ones 
+#     2. Based on correlation analysis, we can remove the following from the data, as they do not contribute greatly to popularity:
+#         - instrumentalness 
+#         - tempo (not a strong relationship with any of the other factors)
+#         - acousticness
+#         - duration
+#     3. Key factors to examine include:
+#         - "energy" (highly correlated to speechiness, which is also reflected in liveness and loudness)
+#         - danceability (accounts for the valence relationship as well)
+#     4. Albums released between years 1980-2010 didn't perform too well in terms of popularity 
+#     5. The release of remastered albums contributed to increased popularity from 2010- on
+# # Q4: Cluster Analysis
+# 
+# 
+# a. identify the right number of clusters
+# - we can do this using the "elbow" method
+# - the silhouette method is a little easier to interpret, so let's conduct both analyses to see if there are nuances between them
+#%% md
+# Let's try two methods to find the optimal number of clusters: elbow and silhouette score. We will apply these within a k-means clustering algorithm. 
+#%%
+df_numbers_adj.head(2)  #pulling up column names
+#%%
+df_numbers_adj.columns
+#%%
+# importing the libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+cluster_df = df_numbers_adj.drop(columns= 'scaled_popularity')
+X= cluster_df
+y = df_numbers_adj['scaled_popularity']
+# determining the maximum number of clusters 
+limit = int((X.shape[0]//2)**0.5)
+ 
+# selecting optimal value of 'k' to predict popularity
+# using elbow method
+# wcss - within cluster sum of squared distances
+wcss = {}
+ 
+for k in range(2,limit+1):
+    model = KMeans(n_clusters=k)
+    model.fit(X)
+    wcss[k] = model.inertia_
+     
+# plotting the wcss values
+# to find out the elbow value
+plt.plot(wcss.keys(), wcss.values(), 'gs-')
+plt.xlabel('Values of "k"')
+plt.ylabel('WCSS')
+plt.title('optimal clusters for popularity via elbow method')
+plt.show()
+
+
+#silhouette score: peak is the number of clusters you should use! 
+from sklearn.metrics import silhouette_score  #can only be done if you have 2 clusters or more
+
+ss = []
+for i in range(2, 11):
+    model = KMeans(n_clusters=i, init='k-means++', random_state=42)
+    model.fit(X)
+    ss.append(silhouette_score(X, model.labels_))
+plt.plot(range(2, 11), ss, marker='^')
+plt.xlabel('Number of clusters')
+plt.ylabel('Silhouette Score')
+plt.show()
+#%% md
+# Based on this, it looks like 5 clusters should be sufficient but we could probably get away with 3 (the bend really starts at 5 clusters).
+#%%
+cluster_df.head()
+#%%
+import numpy as np
+
+np.argmax(
+    ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). 
+model = KMeans(n_clusters=5, init='k-means++', random_state=42)  #specifying 5 clusters from silhouette score and elbow method deductions
+label = model.fit_predict(X)
+print(label)
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+
+pca_num_components = 2
+
+reduced_data = PCA(n_components=pca_num_components).fit_transform(cluster_df)
+results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])
+
+sns.scatterplot(x="pca1", y="pca2", hue=label, data=results, color='spring')
+plt.title('5 clusters with 2 dimensions')
+plt.show()
+#%% md
+# 
+# Looks like 5 clusters doesn't provide a whole lot of specificity, so let's see if things look a little better with less clusters (let's try 3).
+# 
+#%%
+# visualize clusters!
+import numpy as np
+
+np.argmax( ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). 
+model2 = KMeans(n_clusters=3, init='k-means++', random_state=42)  #specifying 3 clusters from silhouette score and elbow method deductions
+label2 = model2.fit_predict(X)
+print(label2)
+#%%
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+
+pca_num_components = 2
+
+reduced_data = PCA(n_components=pca_num_components).fit_transform(X)
+results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])
+
+sns.scatterplot(x='pca1', y='pca2',hue=label2, data=results)
+plt.title('3 clusters with 2 dimensions')
+plt.show()
+#%% md
+# Less clusters makes things a little easier to see the divide, but the distribution isn't much more clear than 5 clusters. Let's check some explicit factors and see what the spread is like for model 1 (5 clusters) and model 2 (3 clusters).
+# 
+#%%
+print('Model 1 Popularity')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model.predict(X)
+df_new.groupby("Cluster_Number")['popularity'].mean()
+#%%
+print('Model 2 (3-cluster) Popularity')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model2.predict(X)
+df_new.groupby("Cluster_Number")['popularity'].mean()
+#%% md
+# Popularity 
+# - Based on this data, we may get cleaner results leaning into 3 clusters of songs based on popularity
+# - There is some distinction between the 5 clusters, but popularity was just split out in increments of 20. 
+#     - This is the equivalent to quartile mapping, so 5 clusters may not be the best approach. 
+# 
+# Let's check the spread of all factors in the clusters for both the 3 and 5-cluster models. 
+#%%
+print('5-cluster model summaries')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model.predict(X)
+cluster_five = (df_new.groupby("Cluster_Number").mean()).T #THANK YOU AMIT FOR THIS 
+cluster_five
+#%% md
+# # 5-cluster model conclusions:
+# 
+# __Cluster 0:__ 
+# Defined by songs with energy and "liveness". These songs are not associated with instrumental or talking during the song and may not be the most popular in the repository.
+# - low/ negligible: 
+#     - danceability
+#     - instrumentalness
+#     - speechiness
+#     - popularity
+#     - duration 
+# - moderate: 
+#     - accousticness
+#     - valence
+#     - tempo
+# - high:
+#     - energy
+#     - liveness
+# 
+# __Cluster 1:__
+# Defined by songs with high energy and loudness, but not necessarily live. This group of songs generally would not include any acoustic or instrumental versions.
+# - low: 
+#     - acousticness
+#     - instrumentalness
+#     - speechiness
+#     - liveness
+# - moderate:
+#     - danceability
+#     - valence
+#     - tempo
+# - high:
+#     - energy
+#     - valence
+#     - loudness
+# 
+# __Cluster 2:__
+# Defined by songs with high energy; these songs tend to be loud, live, heavy instrumentals.
+# - low:
+#     - speechiness
+#     - acousticness
+# - moderate: 
+#     - danceability
+#     - valence
+#     - tempo
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - liveness
+#     - loudness
+# 
+# __Cluster 3:__
+# Songs in this cluster have high energy but are not considered live. These songs feature instrumentals heavily.
+# - low: 
+#     - speechiness
+#     - acousticness
+#     - liveness
+# - moderate: 
+#     - danceability
+#     - tempo
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - valence
+#     - loudness
+#     
+# __Cluster 4:__
+# Songs in this cluster are generally loud, but not considered live. They lack instrumentals and speech-y songs. 
+# - low: 
+#     - instrumentalness
+#     - speechiness
+#     - liveness
+# - moderate:
+#     - acousticness
+#     - danceability
+#     - popularity
+#     - energy
+# - high: 
+#     - loudness
+#%%
+print('3-cluster model summaries')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model2.predict(X)
+three_cluster = df_new.groupby("Cluster_Number").mean().T
+three_cluster.drop('popularity')
+#%% md
+# # 3-cluster model conclusions
+# 
+# 
+# __Cluster 0:__
+# This cluster of songs represents a high energy cohort but the songs may not be as popular. This cluster does not emphasize acoustic or instrumental versions.
+# - low: 
+#     - acousticness
+#     - popularity
+#     - instrumentalness
+# - moderate: 
+#     - danceability
+#     - duration
+# - high: 
+#     - energy
+#     - liveness
+#     - loudness
+# 
+# __Cluster 1:__
+# This cluster of songs possesses a lot of energy but are shorter in length and are not live. These songs are moderately popular.
+# - low: 
+#     - instrumentalness
+#     - liveness
+#     - duration
+# - moderate: 
+#     - acousticness
+#     - popularity
+#     - danceability
+# - high:
+#     - loudness
+#     - energy
+# 
+# __Cluster 2:__
+# Songs in this cohort are most impacted by the "energy" in a song or album. High energy is associated with loudness and liveness, so this makes sense. These songs tend to be shorter in duration and are not acoustic versions. 
+# - low: 
+#     - duration
+#     - popularity
+#     - acousticness
+# - moderate:
+#     - danceability
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - liveness
+#     - loudness
+#%% md
+# # Overall Comments:
+# 
+# Comparing a 3-cluster model with a 5-cluster model, we can see that there are nuances between the cohorts, however these are not very distinct.  My recommendation is to use a 3-cluster model for song recommendations, as there is a more clear dilineation between cohorts. From my perspective, the 5-cluster model splits hairs a little too finely, so trying to find the ROI on a more complicated model is fine, but if a less-complicated model works just as well, then the simpler model is my preferred choice.
+# 
