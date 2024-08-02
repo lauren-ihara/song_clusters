@@ -1,0 +1,516 @@
+#%%
+import pandas as pd
+import numpy as np
+df = pd.read_csv('/Users/laurenrisoleo/Documents/ai ml bootcamp/pythonProject/applied ml hw/rolling_stones_spotify.csv')
+df.head()
+#%% md
+# # Q1: Examine the data
+# - duplicates
+# - missing values 
+# - irrelevant entries
+# - outliers 
+# - erroneous entries (if present)
+#%%
+df.isnull().sum()
+#%% md
+# There are no missing values, so no need for imputation.
+#%%
+df.info()
+#%% md
+# We have mixed data types (float, int, and object). We should preprocess these for easier math later.
+#%%
+#convert name, album, id, uri to strings, release date to a date so we can work with our fields.
+df['name'] = df['name'].astype(pd.StringDtype()) 
+df['album']= df['album'].astype(pd.StringDtype())
+df['id'] = df['id'].astype(pd.StringDtype())
+df['uri']= df['uri'].astype(pd.StringDtype())
+df['release_date'] = pd.to_datetime(df['release_date'], format='mixed') 
+df['year'], df['month'] = df['release_date'].dt.year, df['release_date'].dt.month #split to year/month so we can see change over time
+df['popularity'] = df['popularity'].astype(float) #to help us compare once scaled. float makes it easier.
+df.head(5)
+#%%
+#remove outliers
+
+def remove_outliers(df, col_list, whisk=1.5): #created a function to process any outliers in the data
+    for column in col_list:
+        q1, q3= np.percentile(df[column], [25, 75])
+        iqr = q3-q1 #sets the main interval 
+        lower_limit = q1 - whisk*iqr #whisk is more flexible than 1.5, reco to use this to maintain flexibility
+        upper_limit = q3+ whisk*iqr
+        n_r_before = df.shape[0]
+        df= df[(df[column]>=lower_limit) & (df[column]<= upper_limit)] #replace original df with a new df
+        n_after = df.shape[0]
+        print(column, "Before:", n_r_before, "After:", n_after)
+        return(df)
+#%% md
+# Check distribution:
+#%%
+import matplotlib.pyplot as plt
+import seaborn as sns
+# to get the columns w/ specific data type - this makes it a little easier for processing numeric items
+df_numbers = df.select_dtypes(include = ['float64'])
+df_numbers.head()
+#%% md
+# Visualization:
+#%%
+df_numbers_hist = df_numbers.hist(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'], bins = 30)
+plt.tight_layout()
+plt.show()
+df_numbers_box= df_numbers.boxplot(column =['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence', 'popularity'],vert=False, showfliers=True) 
+plt.show()
+#%% md
+# We see that tempo is a great factor more than the other fields. It would be beneficial to normalize the tempo, duration, liveness, and loudness fields to map to other values, as those are set between 0 and 1. This can also help us with cluster analysis later on.
+# 
+# Let's do this with a min-max scalar approach. This helps us fix our data to a range between 0 and 1. This is sensitive to outliers.
+# 
+# 
+# 
+# 
+# 
+# **Q2: refine the data + Q3: explore data and conduct feature engineering where appropriate**
+#%%
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()  #apply to specific fields of loudness and tempo. 
+tempo_df = pd.DataFrame(df_numbers['tempo'])
+loudness_df = pd.DataFrame(df_numbers['loudness'])
+duration_df = pd.DataFrame(df['duration_ms'])
+liveness_df = pd.DataFrame(df['liveness'])
+popularity_df = pd.DataFrame(df['popularity'])
+scaled_tempo = scaler.fit_transform(tempo_df)
+scaled_loudness = scaler.fit_transform(loudness_df)
+scaled_duration = scaler.fit_transform(duration_df)
+scaled_liveness = scaler.fit_transform(liveness_df)
+scaled_popularity = scaler.fit_transform(popularity_df)
+df_numbers['scaled_tempo'] = scaled_tempo
+df_numbers['scaled_loudness'] = scaled_loudness  #adding our transformed columns to the numeric dataframe.
+df_numbers['scaled_duration'] = scaled_duration
+df_numbers['scaled_liveness'] = scaled_liveness
+df_numbers['scaled_popularity'] = scaled_popularity
+#exploring our new numerical data with the scaled factors
+
+df_numbers_hist = df_numbers.hist(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',
+            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], bins=30)
+plt.tight_layout()
+plt.show()
+df_numbers_box = df_numbers.boxplot(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness',
+            'scaled_loudness', 'speechiness', 'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False,
+    showfliers=True)
+plt.show()  #things are looking a little better now; we can see that each attribute is on the same scale and provide a better representation of the distribution
+#%% md
+# There is some skew in the distribution of album/song features. 
+# 
+# Left-skew
+# - energy
+# 
+# Right-skew
+# - speechiness
+# - instrumentalness
+# 
+# Symmetric(ish)
+# - scaled-tempo (relatively normal distn with some skewness)
+# - scaled-loudness 
+# - danceability
+# 
+# Polynomial 
+# - valence
+# - liveness
+# 
+# Outliers contribute a large proportion of instrumentalness, speechiness, and scaled tempo. 
+# 
+#%%
+df_numbers_box = df_numbers.boxplot(
+    column=['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'scaled_liveness', 'scaled_loudness', 'speechiness',
+            'scaled_tempo', 'valence', 'scaled_duration', 'scaled_popularity'], vert=False, showfliers=False)
+plt.title('Distribution of Scaled Data')
+plt.show()  #removing outliers from visuals
+df_popular_album = df[['album', 'popularity',
+                       'name']]  #we won't need to normalize popularity for this comparison, but it would be good to do so to map to other elements. 
+popularity_df = pd.DataFrame(df_popular_album['popularity'])
+scaled_popularity = scaler.fit_transform(popularity_df)
+df_popular_album['scaled_popularity'] = scaled_popularity
+df_popular_album['year'] = df['year']
+df_popular_album.value_counts().sort_values(ascending=False)  #allows us to check that our new scale is entered properly. 
+#%% md
+# **Q3.a: find the two albums to recommend based on song popularity.**
+#%%
+x = df_popular_album.sort_values('scaled_popularity', ascending=False)
+print('The top two songs are: ', x.head(2))
+#%% md
+# 
+#%% md
+# The top albums to recommend based on popularity include: 
+# - Aftermath score: 80/100 (Paint it black)
+# - Let It Bleed score: 76/100 (Gimme Shelter)
+#%%
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+df_numbers_adj = df_numbers.drop(columns = ['loudness', 'tempo'])
+df_numbers_adj.head()
+#%% md
+# **Q3.b: EDA for patterns**
+#%%
+df_numbers_adj.head()
+#%%
+attribute_correlation= df_numbers_adj.corr().round(2)
+fig, ax = plt.subplots(figsize=(15, 5))
+sns.heatmap(attribute_correlation, annot=True, cmap ='viridis')
+#%% md
+# There is a lot to process in this chart. We can probably simplify it to see if there are significant relationships, but some strong associations exist regardless.
+# 
+# We see moderate to strong positive correlations between:
+# - scaled loudness and energy r=0.7
+# - valence and danceability r=0.55
+# - speechiness and energy r=0.42
+# - liveness and energy r=0.51
+# - liveness and speechiness r=0.4
+# 
+# 
+# Key factors we should test in further analysis include:
+# - "energy" (as it is highly correlated to speechiness, which is also reflected in liveness and loudness)
+# - danceability (accounts for the valence relationship)
+# 
+# We see moderate negative correlation between:
+# - speechniness and valence r= -0.4
+# - liveness and danceability r=-0.52
+# 
+# 
+# We can remove the following from the data, as they do not contribute greatly to popularity:
+# - instrumentalness
+# - tempo (not a strong relationship with any of the other factors)
+# - acousticness
+# - duration
+# 
+# Let's double-check our conclusions through more exploratory analysis. 
+#%% md
+# **Q3.c: Examine popularity and various factors**
+#%%
+#looking at the relationship between scaled popularity and other factors 
+
+from scipy.stats import pearsonr
+attribute_correlation_popularity= df_numbers_adj.corr()['scaled_popularity']
+attribute_correlation
+#%%
+from scipy.stats import pearsonr
+attribute_correlation_danciness= df_numbers_adj.corr()['danceability']
+attribute_correlation
+#%% md
+# Overall, we can see that there isn't one single key driving factor that contributes to an album's popularity. We can conclude that as "liveness" increases, it is likely that popularity decreases in a proportionate manner. 
+# The same goes for "speechiness". Maybe we're missing something from other columns in the data. Let's check and see. 
+#%%
+#evaluate popularity over time
+values, bins, bars = plt.hist( df_popular_album['year'])
+plt.xlabel('Release year')
+plt.ylabel('Popularity')
+plt.show()
+#here we can see that there is a u-shaped distribution to album popularity if we look at it by year. 
+#%% md
+# Looks like there is a parabolic relationship between the release year and popularity. Let's check what could impact the surge in popularity. 
+#%%
+#create groups of albums based on title information; this helps us compare against different types.
+
+df['remastered'] = df['album'].str.contains("Remastered").astype(int)
+df['anniversary'] = df['album'].str.contains("50th Anniversary").astype(int)
+df['mono'] = df['album'].str.contains('Mono').astype(int)
+df['live'] = df['album'].str.contains('Live').astype(int)
+df['long_version'] = df['album'].str.contains('Long Version').astype(int)
+df['stereo'] = df['album'].str.contains('Stereo').astype(int)
+context_df = df[['remastered', 'anniversary', 'mono', 'live', 'long_version', 'stereo']]
+context_df.astype('int')
+context_df.value_counts()
+#%% md
+# The most common "specialty" type of album listened to is "live", followed by anything "remastered". 
+# 
+# 
+# 
+# 
+# Given all the data, we can conclude that....
+# 
+#     1. Context of an album can impact how popular it is 
+#         - We saw that "specialty" albums tend to be more popular, especially live and remastered ones 
+#     2. Based on correlation analysis, we can remove the following from the data, as they do not contribute greatly to popularity:
+#         - instrumentalness 
+#         - tempo (not a strong relationship with any of the other factors)
+#         - acousticness
+#         - duration
+#     3. Key factors to examine include:
+#         - "energy" (highly correlated to speechiness, which is also reflected in liveness and loudness)
+#         - danceability (accounts for the valence relationship as well)
+#     4. Albums released between years 1980-2010 didn't perform too well in terms of popularity 
+#     5. The release of remastered albums contributed to increased popularity from 2010- on
+# # Q4: Cluster Analysis
+# 
+# 
+# a. identify the right number of clusters
+# - we can do this using the "elbow" method
+# - the silhouette method is a little easier to interpret, so let's conduct both analyses to see if there are nuances between them
+#%% md
+# Let's try two methods to find the optimal number of clusters: elbow and silhouette score. We will apply these within a k-means clustering algorithm. 
+#%%
+df_numbers_adj.head(2)  #pulling up column names
+#%%
+df_numbers_adj.columns
+#%%
+# importing the libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+cluster_df = df_numbers_adj.drop(columns= 'scaled_popularity')
+X= cluster_df
+y = df_numbers_adj['scaled_popularity']
+# determining the maximum number of clusters 
+limit = int((X.shape[0]//2)**0.5)
+ 
+# selecting optimal value of 'k' to predict popularity
+# using elbow method
+# wcss - within cluster sum of squared distances
+wcss = {}
+ 
+for k in range(2,limit+1):
+    model = KMeans(n_clusters=k)
+    model.fit(X)
+    wcss[k] = model.inertia_
+     
+# plotting the wcss values
+# to find out the elbow value
+plt.plot(wcss.keys(), wcss.values(), 'gs-')
+plt.xlabel('Values of "k"')
+plt.ylabel('WCSS')
+plt.title('optimal clusters for popularity via elbow method')
+plt.show()
+
+
+#silhouette score: peak is the number of clusters you should use! 
+from sklearn.metrics import silhouette_score  #can only be done if you have 2 clusters or more
+
+ss = []
+for i in range(2, 11):
+    model = KMeans(n_clusters=i, init='k-means++', random_state=42)
+    model.fit(X)
+    ss.append(silhouette_score(X, model.labels_))
+plt.plot(range(2, 11), ss, marker='^')
+plt.xlabel('Number of clusters')
+plt.ylabel('Silhouette Score')
+plt.show()
+#%% md
+# Based on this, it looks like 5 clusters should be sufficient but we could probably get away with 3 (the bend really starts at 5 clusters).
+#%%
+cluster_df.head()
+#%%
+import numpy as np
+
+np.argmax(
+    ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). 
+model = KMeans(n_clusters=5, init='k-means++', random_state=42)  #specifying 5 clusters from silhouette score and elbow method deductions
+label = model.fit_predict(X)
+print(label)
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+
+pca_num_components = 2
+
+reduced_data = PCA(n_components=pca_num_components).fit_transform(cluster_df)
+results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])
+
+sns.scatterplot(x="pca1", y="pca2", hue=label, data=results, color='spring')
+plt.title('5 clusters with 2 dimensions')
+plt.show()
+#%% md
+# 
+# Looks like 5 clusters doesn't provide a whole lot of specificity, so let's see if things look a little better with less clusters (let's try 3).
+# 
+#%%
+# visualize clusters!
+import numpy as np
+
+np.argmax( ss) + 2  #needs a minimum of 2 clusters to work, which is why we start at 2 (add 2 to any number to account for this algo requirement). 
+model2 = KMeans(n_clusters=3, init='k-means++', random_state=42)  #specifying 3 clusters from silhouette score and elbow method deductions
+label2 = model2.fit_predict(X)
+print(label2)
+
+#%%
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+### Run PCA on the data and reduce the dimensions in pca_num_components dimensions
+
+pca_num_components = 2
+
+reduced_data = PCA(n_components=pca_num_components).fit_transform(X)
+results = pd.DataFrame(reduced_data,columns=['pca1','pca2'])
+
+sns.scatterplot(x='pca1', y='pca2',hue=label2, data=results)
+plt.title('3 clusters with 2 dimensions')
+plt.show()
+#%% md
+# Less clusters makes things a little easier to see the divide, but the distribution isn't much more clear than 5 clusters. Let's check some explicit factors and see what the spread is like for model 1 (5 clusters) and model 2 (3 clusters).
+# 
+#%%
+print('Model 1 Popularity')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model.predict(X)
+df_new.groupby("Cluster_Number")['popularity'].mean()
+#%%
+print('Model 2 (3-cluster) Popularity')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model2.predict(X)
+df_new.groupby("Cluster_Number")['popularity'].mean()
+#%% md
+# Popularity 
+# - Based on this data, we may get cleaner results leaning into 3 clusters of songs based on popularity
+# - There is some distinction between the 5 clusters, but popularity was just split out in increments of 20. 
+#     - This is the equivalent to quartile mapping, so 5 clusters may not be the best approach. 
+# 
+# Let's check the spread of all factors in the clusters for both the 3 and 5-cluster models. 
+#%%
+print('5-cluster model summaries')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model.predict(X)
+cluster_five = (df_new.groupby("Cluster_Number").mean()).T #THANK YOU AMIT FOR THIS 
+cluster_five
+#%% md
+# # 5-cluster model conclusions:
+# 
+# __Cluster 0:__ 
+# Defined by songs with energy and "liveness". These songs are not associated with instrumental or talking during the song and may not be the most popular in the repository.
+# - low/ negligible: 
+#     - danceability
+#     - instrumentalness
+#     - speechiness
+#     - popularity
+#     - duration 
+# - moderate: 
+#     - accousticness
+#     - valence
+#     - tempo
+# - high:
+#     - energy
+#     - liveness
+# 
+# __Cluster 1:__
+# Defined by songs with high energy and loudness, but not necessarily live. This group of songs generally would not include any acoustic or instrumental versions.
+# - low: 
+#     - acousticness
+#     - instrumentalness
+#     - speechiness
+#     - liveness
+# - moderate:
+#     - danceability
+#     - valence
+#     - tempo
+# - high:
+#     - energy
+#     - valence
+#     - loudness
+# 
+# __Cluster 2:__
+# Defined by songs with high energy; these songs tend to be loud, live, heavy instrumentals.
+# - low:
+#     - speechiness
+#     - acousticness
+# - moderate: 
+#     - danceability
+#     - valence
+#     - tempo
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - liveness
+#     - loudness
+# 
+# __Cluster 3:__
+# Songs in this cluster have high energy but are not considered live. These songs feature instrumentals heavily.
+# - low: 
+#     - speechiness
+#     - acousticness
+#     - liveness
+# - moderate: 
+#     - danceability
+#     - tempo
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - valence
+#     - loudness
+#     
+# __Cluster 4:__
+# Songs in this cluster are generally loud, but not considered live. They lack instrumentals and speech-y songs. 
+# - low: 
+#     - instrumentalness
+#     - speechiness
+#     - liveness
+# - moderate:
+#     - acousticness
+#     - danceability
+#     - popularity
+#     - energy
+# - high: 
+#     - loudness
+#%%
+print('3-cluster model summaries')
+df_new = df_numbers_adj.copy()
+df_new['Cluster_Number'] = model2.predict(X)
+three_cluster = df_new.groupby("Cluster_Number").mean().T
+three_cluster.drop('popularity')
+#%% md
+# # 3-cluster model conclusions
+# 
+# 
+# __Cluster 0:__
+# This cluster of songs represents a high energy cohort but the songs may not be as popular. This cluster does not emphasize acoustic or instrumental versions.
+# - low: 
+#     - acousticness
+#     - popularity
+#     - instrumentalness
+# - moderate: 
+#     - danceability
+#     - duration
+# - high: 
+#     - energy
+#     - liveness
+#     - loudness
+# 
+# __Cluster 1:__
+# This cluster of songs possesses a lot of energy but are shorter in length and are not live. These songs are moderately popular.
+# - low: 
+#     - instrumentalness
+#     - liveness
+#     - duration
+# - moderate: 
+#     - acousticness
+#     - popularity
+#     - danceability
+# - high:
+#     - loudness
+#     - energy
+# 
+# __Cluster 2:__
+# Songs in this cohort are most impacted by the "energy" in a song or album. High energy is associated with loudness and liveness, so this makes sense. These songs tend to be shorter in duration and are not acoustic versions. 
+# - low: 
+#     - duration
+#     - popularity
+#     - acousticness
+# - moderate:
+#     - danceability
+# - high: 
+#     - energy
+#     - instrumentalness
+#     - liveness
+#     - loudness
+#%% md
+# # Overall Comments:
+# 
+# Comparing a 3-cluster model with a 5-cluster model, we can see that there are nuances between the cohorts, however these are not very distinct.  My recommendation is to use a 3-cluster model for song recommendations, as there is a more clear dilineation between cohorts. From my perspective, the 5-cluster model splits hairs a little too finely, so trying to find the ROI on a more complicated model is fine, but if a less-complicated model works just as well, then the simpler model is my preferred choice.
+# 
